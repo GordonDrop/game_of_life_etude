@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Life</title>
+    <!--<link rel="stylesheet" href="style.css">-->
+    <style>
+      body, html { 
+        height: 100%;
+        background: #ccc;
+      }
+
+      #world {
+        min-height: 400px;
+        min-width: 400px;
+        margin: 0 auto;
+      }
+
+    </style>
+</head>
+<body>
+	
+
+<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="js/underscore.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+
+<script>
+
+_.templateSettings = 
+{
+  interpolate : /\{\{(.+?)\}\}/g
+};
+
+var obj = 
+{
+  [ 0, 1, 0, 1, 0 ],
+  [ 1, 1, 0, 1, 0 ],
+  [ 0, 1, 1, 0, 0 ],
+  [ 1, 0, 0, 1, 1 ]
+};
+
+function render( obj ) 
+{
+  _.each( obj, function( num, key ) {
+
+    if ( key === 0 ) {
+      console.log( true );
+    } else {
+      console.log( false ); 
+    };
+
+  });
+}
+
+</script>
+
+
+<!-- Templates -->
+<script type="text/template" id="world">
+
+  <table>
+    <tbody>
+
+    </tbody>
+  </table>
+   
+</script>
+</body>
+</html>
