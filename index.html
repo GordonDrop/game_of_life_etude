@@ -7,39 +7,76 @@
     <style>
       body, html { 
         height: 100%;
-        background: #ccc;
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      a {
+        color: rgb(6, 107, 218);
       }
 
       #world {
-        /*min-height: 260px;
-        min-width: 320px;*/
         margin: 0 auto;
+        border-collapse: collapse;
+        border: 1px solid #999;
+      }
+
+      .left-col {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 300px;
+        min-height: 100%;
+        padding: 20px;
+        background: #333;
+        color: #DFDFDF;
+      }
+
+      .right-col {
+        padding: 50px;
+        padding-left: 300px;
+        margin: 0 auto;
+        color: #414141;
       }
       
       tr, td { 
-        height: 20px;
-        width: 20px;
-        background: black;
-        color: white;*/
+        height: 5px;
+        width: 5px;
+        background: #DCE2EB;
+        border: 1px solid #ccc;
+        color: white;
       }
 
       .alive {
-        background: green;
+        /*background: rgb(14, 66, 14);*/
+        background: tomato;
+      }
+
+      .example-name {
+        padding-left: 330px;
       }
 
     </style>
 </head>
 <body>
-<!-- Templates -->
 
-<table id="world" cellspacing='0' cellpadding='0' border='0' >    
-  <tbody>
-  </tbody>
-</table>
+<div class="left-col">
+  <h1>Convay's<br> Game of Life</h1>
+  
+  <p>more examples coming soon...</p>  
+</div>
+
+<div class="right-col">
+  <p class="example-name">Gosper's Glider Gun <a href="http://en.wikipedia.org/wiki/Gun_(cellular_automaton)">Read more...</a></p>
+  <table id="world" cellspacing='0' cellpadding='0' border='0' >    
+    <tbody>
+    </tbody>
+  </table>
+</div>
 
 
 <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="js/underscore.js"></script>
+<script type="text/javascript" src="js/examples.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
 
 </body>
