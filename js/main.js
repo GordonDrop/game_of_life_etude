@@ -8,26 +8,27 @@
     // console.log( ._isArray( cell );) 
     // true
 
-
     // TODO:
     //  1. Create infinte wrapper
     //  2. Split Update View in actions
     //  3. Add controls to randomizer and examples
     //  4. create RLE converter
+    //  5. move first gen to ui or controler
     //  draft : function updateView( worldState, firstGen ) {}
-    var worldState = gliderGun,
-        domElem = $( '#world' ),
-        clearElem = 'tr',
-        height = 100,
-        width = 100,
-        timeout = 1,
-        model = [],
-        view = '';
+    var worldState = gliderGun;
+    var domElem = $( '#world' );
+    var clearElem = 'tr';
+    var height = 40;
+    var width = 40;
+    var timeout = 50;
 
     function loop()
-    {    
+    {   
+    	var model = [];
+    	var view = '';
+
         if( !_.isArray( worldState )) {
-            model = firstGeneration( width, height );
+            model = randomGeneration( width, height );
         } else {
             model = updateData( worldState );
         };
@@ -41,6 +42,13 @@
 
     setInterval( loop, timeout );
 })();
+
+// helper function
+// Fix javascript Modulo
+function mod( m, n ) 
+{ 
+    return (( m % n ) + n ) % n; 
+}
 
 // return somtg?
 // input DOM OBJECT, STRING, STRING => WORLD
@@ -63,11 +71,11 @@ function draw( domTarget, removeHtml, drawHtml )
 // represents HEIGHT
 // x - size of the nested array
 // represents WIDTH
-// output: array which represent first generation
-function firstGeneration ( width, height )
+// output: array which represent first generationrandom ( width, height )
+function randomGeneration ( width, height )
 {
-    var worldState = [],
-    cell;
+    var worldState = [];
+    var cell;
 
     _( height ).times(function( i ) 
     {
@@ -86,9 +94,9 @@ function firstGeneration ( width, height )
 // output: next generation world state
 function updateData( worldState )
 {
-    var width = worldState[0].length,
-    height = worldState.length,
-    newWorldState = [];
+    var width = worldState[0].length;
+    var height = worldState.length;
+    var newWorldState = [];
 
     _(height).times(function( y )
     {    
@@ -99,7 +107,7 @@ function updateData( worldState )
             neighbours = checkNeighbour( y, x, worldState );
             cellStatus = checkCellStatus( worldState[y][x], neighbours );
 
-            if ( worldState[y][x] === 1 )
+            if ( worldState[y][x] )
             {
             	newWorldState[y][x] = ( cellStatus ) ? 1 : 0;  	
             }
@@ -117,28 +125,30 @@ function updateData( worldState )
 // input: array keys and array 
 // to check Neighbour cells
 // output: Neighbour cells amount
-function checkNeighbour( keyY, keyX, worldState ) 
+function checkNeighbour( y, x, worldState ) 
 {
-    var diffY = diffX = -1,
-    dy = dx = 0,
-    cnt = 0;
+    var width = worldState[0].length;
+    var height = worldState.length;
+    var dy = dx = 0;
+    var cnt = 0;
 
-    for( var diffY = -1; diffY < 2; diffY += 1 ) 
-    {
-        // check if key out of the array range
-        dy = keyY + diffY;
-        if ( _.isUndefined( worldState[dy] )) continue;
+    _(3).times( function( i ) {
 
-        for( var diffX = -1; diffX < 2; diffX += 1 ) 
-        {
-            dx = keyX + diffX;
+        var a = ( y - 1 + i )
+        dy = mod( a, height );
 
-            // check if key out of the array range,
-            // dead or it has keY, keyX
-            if ( _.isUndefined( worldState[dy][dx] ) || ( diffX === 0 && diffY === 0 )) continue;
-            if ( worldState[dy][dx] === 1 ) cnt += 1;
-        }
-    }
+        _(3).times( function( j ) {
+            var b = ( x - 1 + j );
+            dx = mod( b, width );
+            if ( i === 1 && j === 1 ) {
+                cnt += 0;
+            }
+            else {
+                cnt += worldState[dy][dx];
+            }            
+        });        
+    });
+    
     return cnt;
 }
 
