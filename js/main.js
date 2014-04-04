@@ -1,26 +1,17 @@
 (function main()
 {
-    // strange behavior detected
-    // cell = Math.floor(Math.random() * 2);
-    // console.log( ._isNumber( cell ); )
-    // true
-    // worldState[i][j].push( cell );
-    // console.log( ._isArray( cell );) 
-    // true
-
     // TODO:
-    //  1. Create infinte wrapper
     //  2. Split Update View in actions
     //  3. Add controls to randomizer and examples
     //  4. create RLE converter
     //  5. move first gen to ui or controler
-    //  draft : function updateView( worldState, firstGen ) {}
-    var worldState = gliderGun;
+
+    var worldState;
     var domElem = $( '#world' );
     var clearElem = 'tr';
-    var height = 40;
-    var width = 40;
-    var timeout = 50;
+    var height = 10;
+    var width = 10;
+    var timeout = 30;
 
     function loop()
     {   
@@ -42,13 +33,6 @@
 
     setInterval( loop, timeout );
 })();
-
-// helper function
-// Fix javascript Modulo
-function mod( m, n ) 
-{ 
-    return (( m % n ) + n ) % n; 
-}
 
 // return somtg?
 // input DOM OBJECT, STRING, STRING => WORLD
@@ -121,10 +105,6 @@ function updateData( worldState )
     return newWorldState;
 };
 
-// NUMBER, NUMBER, ARRAY => NUNBER
-// input: array keys and array 
-// to check Neighbour cells
-// output: Neighbour cells amount
 function checkNeighbour( y, x, worldState ) 
 {
     var width = worldState[0].length;
@@ -132,23 +112,18 @@ function checkNeighbour( y, x, worldState )
     var dy = dx = 0;
     var cnt = 0;
 
-    _(3).times( function( i ) {
+    for( var i = -1; i < 2; i += 1 ) {
 
-        var a = ( y - 1 + i )
-        dy = mod( a, height );
+        dy = y + i;
+        if ( _.isUndefined( worldState[dy] )) continue;
 
-        _(3).times( function( j ) {
-            var b = ( x - 1 + j );
-            dx = mod( b, width );
-            if ( i === 1 && j === 1 ) {
-                cnt += 0;
-            }
-            else {
-                cnt += worldState[dy][dx];
-            }            
-        });        
-    });
-    
+        for( var j = -1; j < 2; j += 1 )  {
+
+            dx = x + j;
+            if ( _.isUndefined( worldState[dy][dx] ) || ( i === 0 && j === 0 )) continue;
+            if ( worldState[dy][dx] === 1 ) cnt += 1;
+        }
+    }
     return cnt;
 }
 
