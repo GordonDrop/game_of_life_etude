@@ -1,12 +1,16 @@
 (function main()
 {
     // TODO:
-    //  2. Split Update View in actions
-    //  3. Add controls to randomizer and examples
-    //  4. create RLE converter
-    //  5. move first gen to ui or controler
+    // 1. Add algorithm to follow colony movements
+    // 2. Split Update View in actions
+    // 3. Add controls to randomizer and examples
+    // 5. move first gen to ui or controler
+    // 4. create RLE converter
+    // 6. Add stop and start controls
+    // 7. Add algorithm tp detect still colonyes
+    // 8. Generation colors
 
-    var worldState;
+    var worldState = gliderGun;
     var domElem = $( '#world' );
     var clearElem = 'tr';
     var height = 10;
@@ -112,18 +116,36 @@ function checkNeighbour( y, x, worldState )
     var dy = dx = 0;
     var cnt = 0;
 
-    for( var i = -1; i < 2; i += 1 ) {
+    // for( var i = -1; i < 2; i += 1 ) {
 
-        dy = y + i;
-        if ( _.isUndefined( worldState[dy] )) continue;
+    //     dy = y + i;
+    //     if ( _.isUndefined( worldState[dy] )) continue;
 
-        for( var j = -1; j < 2; j += 1 )  {
+    //     for( var j = -1; j < 2; j += 1 )  {
 
-            dx = x + j;
-            if ( _.isUndefined( worldState[dy][dx] ) || ( i === 0 && j === 0 )) continue;
-            if ( worldState[dy][dx] === 1 ) cnt += 1;
-        }
-    }
+    //         dx = x + j;
+    //         if ( _.isUndefined( worldState[dy][dx] ) || ( i === 0 && j === 0 )) continue;
+    //         if ( worldState[dy][dx] === 1 ) cnt += 1;
+
+    //         try {
+    //             if ( !( i === 0 && j === 0 )) cnt += worldState[dy][dx];
+    //         } catch (e) {
+    //             cnt += 0;
+    //         }
+    //     }
+    // }
+
+    _( 3 ).times( function( i ) {
+        dy = y - 1 + i;
+
+        _( 3 ).times( function( j ) {
+            dx = x - 1 + j;
+
+            try {
+                if ( !( i === 1 && j === 1 )) cnt += worldState[dy][dx];
+            } catch (e) {}
+        });
+    });
     return cnt;
 }
 
