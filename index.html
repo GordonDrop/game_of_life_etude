@@ -10,44 +10,56 @@
         font-family: 'Open Sans', sans-serif;
       }
 
-      a {
-        color: rgb(6, 107, 218);
-      }
+      a { color: rgb(6, 107, 218); }
 
-      #world {
-        margin: 0 auto;
-        border-collapse: collapse;
-        border: 1px solid #999;
+      #game {}
+
+      #ui {
+          padding: 20px;
       }
 
       .left-col {
         position: fixed;
         top: 0;
         left: 0;
-        width: 300px;
+        width: 25%;
         min-height: 100%;
-        padding: 20px;
+        padding: 1%;
         background: #333;
         color: #DFDFDF;
       }
 
       .right-col {
         float: right;
+        width: 65%;
         padding: 50px;
-        padding-left: 300px;
+        margin: 0 auto;
         color: #414141;
       }
-      
-      tr, td { 
-        height: 11px;
-        width: 11px;
+
+      #field {
+          border: 1px solid #ccc;
+          border-right: none;
+          border-top: none
+      }
+
+      td {
+        height: 3px;
+        width: 3px;
         background: #DCE2EB;
         border: 1px solid #ccc;
+        border-left: none;
+        border-bottom: none;
         color: white;
       }
 
-      .alive {
-        background: rgb(14, 66, 14);
+      .alive { background: tomato; }
+
+      .example-name { padding-left: 330px; }
+
+      #example-list a {
+          display: block;
+          padding: 10px;
       }
 
     </style>
@@ -57,22 +69,39 @@
 <div class="left-col">
   <h1>Convay's<br> Game of Life</h1>
   
-  <p>more examples coming soon...</p>  
+  <p>Examples list:</p>
+  <div id="example-list">
+      <a href="#" data-action="showExample" data-name="example1">Simple pattern #1</a>
+      <a href="#" data-action="showExample" data-name="example1">Simple pattern #2</a>
+      <a href="#" data-action="showExample" data-name="MWSS">MWSS</a>
+      <a href="#" data-action="showExample" data-name="gliderGun">Glider gun</a>
+      <a href="#" data-action="showExample" data-name="heavy1">Heavy pattern</a>
+  </div>
 </div>
 
 <div class="right-col">
-  <p>Gosper's Glider Gun <a href="http://en.wikipedia.org/wiki/Gun_(cellular_automaton)">Read more...</a></p>
-  <table id="world" cellspacing='0' cellpadding='0' border='0' >    
-    <tbody>
-    </tbody>
-  </table>
+    <p class="example-name">Gosper's Glider Gun <a href="http://en.wikipedia.org/wiki/Gun_(cellular_automaton)">Read more...</a></p>
+    <div id="ui">
+        <div>
+            <button data-action="createRandom">Create random generation</button>
+            <button data-action="play">Play</button>
+            <button data-action="pause">Pause</button>
+        </div>
+    </div>
+    <di id="game"></div>
 </div>
 
 
-<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
 <script type="text/javascript" src="js/underscore.js"></script>
 <script type="text/javascript" src="js/examples.js"></script>
+<script type="text/javascript" src="js/lib.js"></script>
+<script type="text/javascript" src="js/calc.js"></script>
+<script type="text/javascript" src="js/draw.js"></script>
+<script type="text/javascript" src="js/ui.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
+<script>
+    GAME.initGame( 'game' );
+</script>
 
 </body>
 </html>

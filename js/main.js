@@ -1,167 +1,70 @@
-function main() 
-{
-	// constants
-	var width = 25;
-	var height = 15;
-	var timeout = 1;
-	var domElem = $( '#world' );
-	var clearElem = 'tr';
-	var x = 0;
-	var saveWorldState = gliderGun;
-						 
-	console.log( 'die')
+var GAME = (function ( GAME ){
+    var self = GAME = GAME || {};
 
-	var model;
-	var view;
+    self.options = {
+        elem: '',
+        exampleElem: 'example-list',
+        uiElem: 'ui',
+        rows: '50',
+        cols: '50'
+    };
 
-	function loop()
-	{	
-		if( !_.isArray( saveWorldState )) {
-			//model = firstGeneration( width, height );
-			model = test;
-		} else {
-			model = updateData( saveWorldState );
-		};
+    self.initGame = function ( elem ) {
+        self.options.elem = document.getElementById( elem );
+        self.calc.initMatrix( self.options.rows, self.options.cols );
+        self.draw.render( self.options.elem );
+        self.showExample( self.options.exampleElem );
+        self.delegateEvents( self.options.uiElem );
+    };
 
-		view = updateView( model );
-		draw( domElem, clearElem, view );
-		saveWorldState = model;
+    self.loop = function () {
+        self.request = requestAnimationFrame( self.loop );
+        self.calc.updateData();
+        self.draw.render( self.options.elem );
+    };
 
-	};
-	setInterval( loop, timeout );
-};
+    self.delegateEvents = function ( elem ) {
+        var elemUi = document.getElementById( elem );
 
-// input OBJECT, STRING, STRING => WORLD
-// domTarget to animate one generation state
-// removeHtml elements to clear from DOM
-// drawHtml html to darw generation
-function draw( domTarget, removeHtml, drawHtml )
-{
-	// clear screen
-	if( domTarget.has( removeHtml )) 
-		{ domTarget.find( removeHtml ).remove(); }
+        elemUi.onclick = function(e) {
+            e.preventDefault();
+            var event = e || window.event;
+            var target = event.target;
+            var action = target.getAttribute( 'data-action' );
 
-	// draw new generation
-	domTarget.find( 'tbody' ).append( drawHtml );
-}
+            if ( action ) self[action]();
+        }
+    };
 
-// number, number => array
-// input: two numbers
-// output: array which represent world
-// y - size of the first array
-// represents HEIGHT
-// x - size of the nested array
-// represents WIDTH
-function firstGeneration( x, y )
-{
-	console.log( 'create model', genCnt);
-	var cell;
-	var worldState = [];
+    self.createRandom = function () {
+        self.pause();
+        self.calc.initMatrix( self.options.rows, self.options.cols, true );
+        self.draw.render( self.options.elem );
+    };
 
-	_(y).times(function( i ) 
-	{
-		worldState[i] = [];
-		_(x).times(function( j ) 
-		{
-			cell = Math.floor(Math.random() * 2);
-			worldState[i][j] = [];
-			worldState[i][j].push( cell );		
-		});
-	});
-	return worldState;
-};
+    self.play = function () {
+        self.loop();
+    };
 
-function updateData( worldState )
-{
-	// console.log( 'update model', genCnt );
-	var yLen = worldState.length;
-	var xLen = worldState[0].length;
-	var newWorldState = _.clone( worldState );
+    self.pause = function () {
+        cancelAnimationFrame(self.request)
+    };
 
-	_(yLen).times(function( y )
-	{	
-		newWorldState[y] = [];
-		_(xLen).times(function( x )
-		{	
-			newWorldState[y][x] = []
-			neighbours = checkNeighbour( y, x, worldState );
-			if ( neighbours === 3 ) console.log( '3' );
+    self.showExample = function ( elem ) {
+        var elemUi = document.getElementById( elem );
 
-			if( worldState[y][x] === 1 ) 
-			{	
-				if ( neighbours < 2 || neighbours > 3 ) 
-				{
-					newWorldState[y][x] = 0;
-				} else {
-					newWorldState[y][x]= 1;
-				}
-			}
-			else
-			{
-				if ( neighbours === 3 ) 
-				{
-					newWorldState[y][x] = 1;
-				} else {
-					newWorldState[y][x] = 0;
-				}
-			}
-		});		
-	});
+        elemUi.onclick = function(e) {
+            e.preventDefault();
+            self.pause();
+            var event = e || window.event;
+            var target = event.target;
+            var name = target.getAttribute( 'data-name' );
 
-	return newWorldState;
-};
-
-function checkNeighbour( keyY, keyX, worldState ) 
-{
-	var cnt = 0;
-	var dy = dx = 0;
-	var diffY = diffX = -1;
-	var yLen = worldState.length;
-	var xLen = worldState[0].length;
-
-	for( var diffY = -1; diffY < 2; diffY += 1 ) 
-	{
-		// check if key out of the array range
-		dy = keyY + diffY;
-		if ( _.isUndefined(worldState[dy]) ) continue;
-
-		for( var diffX = -1; diffX < 2; diffX += 1 ) 
-		{
-			dx = keyX + diffX;
-
-			// check if key out of the array range,
-			// dead or it has keY, keyX
-			if ( _.isUndefined(worldState[dy][dx]) || (diffX == 0 && diffY == 0 )) continue;
-			if ( worldState[dy][dx] === 1 ) cnt++;
-		}
-	}
-	return cnt;
-}
-
-function updateView( worldState ) 
-{	
-	var alive = '<td class="alive"></td>';
-	var dead = '<td></td>';
-	var close = '</tr>';
-	var open = '<tr>';
-	var html = '';
-
-	_.each( worldState, function( element ) 
-	{ 
-	   	html += open;
-
-	    _.each( element, function( subEl ) 
-	    {
-	        if ( subEl == 1 ) {
-	          html += alive;
-	        } else {
-	          html += dead;	          
-	        };
-	    });
-  		html += close; 
-	});
-
-	return html;
-};
-
-main();
+            if ( name ) {
+                GAME.calc.setMatrix( examples[name] );
+                GAME.draw.render( self.options.elem );
+            }
+        }
+    };
+    return GAME;
+}( GAME || {} ));
