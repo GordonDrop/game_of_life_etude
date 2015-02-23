@@ -3,7 +3,7 @@
 // 2. Display
 
 // TODO:
-// 1. refuck to proto
+// 1. refuck to proto???
 // 2. add options to change speed of animation, menu of examples and options to pause, choose random
 // 3. add canvas
 // 4. function to detect stable generations or dead worlds
@@ -90,16 +90,34 @@ function clearFrame( parent ) {
     document.getElementById( parent ).innerHTML = '';
 }
 
-function runGame( grid, fps ) {
-    function runAnimation() {
-        setTimeout( function() {
-            clearFrame( 'game' );
-            drawFrame( 'game', grid );
-            grid = nextGen( grid );
-            requestAnimationFrame( runAnimation );
-        }, 1000 / fps );
-    }
-    runAnimation( grid );
-};
+function runAnimation( fps, frameFunc ) {
+    var fpsInterval = 1000 / fps;
+    var now, deltaTime ,then = Date.now();
+    var stop = false;
 
-runGame( gliderGun, 5 );
+    function frame( time ) {
+        now = Date.now();
+        deltaTime = now - then;
+
+        if ( deltaTime > fpsInterval ) {
+            frameFunc();
+            then = now - ( deltaTime % fpsInterval );
+        }
+        requestAnimationFrame( frame );
+    };
+    requestAnimationFrame( frame );
+}
+
+function runGame( grid, fps ) {
+    var grid = grid || makeGrid( 50, 50, true );
+    var fps = fps || 30;
+
+    function animation() {
+        // !!! HARDCODE
+        clearFrame( 'game' );
+        drawFrame( 'game', grid );
+        grid = nextGen( grid );
+    }
+    runAnimation( fps, animation );
+};
+runGame( gliderGun, 4 );
