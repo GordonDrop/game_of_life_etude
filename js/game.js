@@ -20,7 +20,7 @@ function makeGrid( width, height, isRandom ) {
         grid.push( gridLine );
     }
     return grid;
-};
+}
 
 function nextGen( grid ) {
     var newGrid = [];
@@ -35,7 +35,7 @@ function nextGen( grid ) {
         newGrid.push( gridLine );
     }
     return newGrid;
-};
+}
 
 function countNeighbors( x, y, grid ) {
     var cnt = 0;
@@ -84,7 +84,7 @@ function drawFrame( parent, grid ) {
         })
     });
     wrap.appendChild( gridTable );
-};
+}
 
 function clearFrame( parent ) {
     document.getElementById( parent ).innerHTML = '';
@@ -95,7 +95,7 @@ function runAnimation( fps, frameFunc ) {
     var now, deltaTime ,then = Date.now();
     var stop = false;
 
-    function frame( time ) {
+    function frame() {
         now = Date.now();
         deltaTime = now - then;
 
@@ -104,20 +104,22 @@ function runAnimation( fps, frameFunc ) {
             then = now - ( deltaTime % fpsInterval );
         }
         requestAnimationFrame( frame );
-    };
+    }
     requestAnimationFrame( frame );
 }
 
 function runGame( grid, fps ) {
     var grid = grid || makeGrid( 50, 50, true );
     var fps = fps || 30;
+    var pause = false;
 
     function animation() {
+        if ( pause ) return false;
         // !!! HARDCODE
         clearFrame( 'game' );
         drawFrame( 'game', grid );
         grid = nextGen( grid );
     }
     runAnimation( fps, animation );
-};
+}
 runGame( gliderGun, 4 );
