@@ -51,7 +51,7 @@ function countNeighbors( x, y, grid ) {
 }
 
 function isAlive( neighbors, cell ) {
-    var status = '';
+    var status;
     if ( cell )
         status = ( neighbors === 2 || neighbors === 3 );
     else
@@ -73,7 +73,6 @@ function element( tagName, className ) {
 function drawFrame( parent, grid ) {
     var wrap = document.getElementById( parent );
     var gridTable = element( 'table' );
-    wrap.appendChild( gridTable );
 
     grid.forEach( function( gridLine ) {
         var tableRow = element( 'tr' );
@@ -83,7 +82,8 @@ function drawFrame( parent, grid ) {
             var className = cell ? 'alive' : '';
             tableRow.appendChild( element( 'td', className ) );
         })
-    })
+    });
+    wrap.appendChild( gridTable );
 };
 
 function clearFrame( parent ) {
@@ -91,8 +91,6 @@ function clearFrame( parent ) {
 }
 
 function runGame( grid, fps ) {
-    var fps = 15;
-
     function runAnimation() {
         setTimeout( function() {
             clearFrame( 'game' );
@@ -104,4 +102,4 @@ function runGame( grid, fps ) {
     runAnimation( grid );
 };
 
-runGame( gliderGun );
+runGame( gliderGun, 5 );
