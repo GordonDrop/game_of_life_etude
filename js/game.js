@@ -100,25 +100,26 @@ function runAnimation( fps, frameFunc ) {
         deltaTime = now - then;
 
         if ( deltaTime > fpsInterval ) {
-            frameFunc();
+            stop = frameFunc() === false;
             then = now - ( deltaTime % fpsInterval );
         }
+        if( !stop )
         requestAnimationFrame( frame );
     }
     requestAnimationFrame( frame );
 }
 
 function runGame( grid, fps ) {
-    var grid = grid || makeGrid( 50, 50, true );
+    var grid = grid || makeGrid( 50, 50 );
     var fps = fps || 30;
-    var pause = false;
+    var pause = true;
 
     function animation() {
-        if ( pause ) return false;
         // !!! HARDCODE
         clearFrame( 'game' );
         drawFrame( 'game', grid );
         grid = nextGen( grid );
+        if ( pause ) return false;
     }
     runAnimation( fps, animation );
 }
