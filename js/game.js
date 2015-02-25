@@ -4,16 +4,16 @@
 
 // TODO:
 // 1. refuck to proto???
-// 2. add options to change speed of animation, menu of examples and options to pause, choose random
+// 2. Refuck ui building
 // 3. add canvas
 // 4. function to detect stable generations or dead worlds
 
 function makeGrid( width, height, isRandom ) {
     var grid = [];
 
-    for ( var y = 0; y < width; y++ ) {
+    for ( var y = 0; y < height; y++ ) {
         var gridLine = [];
-        for( var x = 0; x < height; x++ ) {
+        for( var x = 0; x < width; x++ ) {
             var cell = isRandom ?  Math.random() < 0.3 : false;
             gridLine.push( cell ) ;
         }
@@ -71,7 +71,7 @@ function element( tagName, className ) {
 }
 
 function drawFrame( parent, grid ) {
-    var wrap = document.getElementById( parent );
+    var wrap = parent;
     var gridTable = element( 'table' );
 
     grid.forEach( function( gridLine ) {
@@ -87,12 +87,13 @@ function drawFrame( parent, grid ) {
 }
 
 function clearFrame( parent ) {
-    document.getElementById( parent ).innerHTML = '';
+    return parent.innerHTML = '';
 }
 
-function runAnimation( fps, frameFunc ) {
-    var fpsInterval = 1000 / fps;
-    var now, deltaTime ,then = Date.now();
+function runAnimation( frameFunc ) {
+    // !!! HARDCODE - default fps = 30
+    var fpsInterval = 1000 / 30;
+    var now, deltaTime, then = Date.now();
     var stop = false;
 
     function frame() {
@@ -109,18 +110,57 @@ function runAnimation( fps, frameFunc ) {
     requestAnimationFrame( frame );
 }
 
-function runGame( grid, fps ) {
+function runGame( grid ) {
     var grid = grid || makeGrid( 50, 50 );
-    var fps = fps || 30;
     var pause = true;
+    // control elements
+    var examplesUL = document.getElementById( 'example-list' ),
+        randomBtn = document.getElementById( 'createRandom' ),
+        pauseBtn = document.getElementById( 'pause' ),
+        gameEl = document.getElementById( 'game' );
 
-    function animation() {
-        // !!! HARDCODE
-        clearFrame( 'game' );
-        drawFrame( 'game', grid );
+    // build examples list
+    var examplesKeys = Object.keys( examplesList );
+    examplesKeys.forEach( function( name ) {
+        var li = element( 'li' );
+        li.textContent = name;
+        li.setAttribute( 'data-name', name );
+        examplesUL.appendChild( li );
+    });
+
+    function togglePause() {
+        pause = !pause;
+        pauseBtn.textContent = pause ? 'Play' : 'Pause';
+        if ( !pause ) runAnimation( loop );
+    }
+
+    function createRandom() {
+        var width = document.getElementById( 'width' ).value;
+        var height = document.getElementById( 'height' ).value;
+
+        if ( !pause ) togglePause();
+        grid = makeGrid( width, height, true );
+        clearFrame( gameEl );
+        drawFrame( gameEl, grid );
+    }
+
+    pauseBtn.addEventListener( 'click', togglePause );
+    randomBtn.addEventListener( 'click', createRandom );
+
+    examplesUL.addEventListener( 'click', function(e) {
+        if ( e.target.tagName === 'LI' ) {
+            if ( !pause ) togglePause();
+            grid = examplesList[e.target.getAttribute( 'data-name' )];
+            clearFrame( gameEl );
+            drawFrame( gameEl, grid );
+        }
+    });
+
+    function loop() {
+        clearFrame( gameEl );
+        drawFrame( gameEl, grid );
         grid = nextGen( grid );
         if ( pause ) return false;
     }
-    runAnimation( fps, animation );
+    runAnimation( loop );
 }
-runGame( gliderGun, 4 );

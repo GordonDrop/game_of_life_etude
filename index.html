@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
   <head>
     <meta charset="utf-8">
     <title>Life</title>
@@ -31,6 +31,13 @@
         color: #DFDFDF;
       }
 
+      #example-list li {
+        display: block;
+        padding: 10px;
+        color: rgb(6, 107, 218);
+        cursor: pointer;
+      }
+
       .right-col {
         padding: 50px;
         padding-left: 400px;
@@ -55,23 +62,61 @@
         padding-left: 330px;
       }
 
+      .controls, .controls div { margin: 20px 0; }
+
+      button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #333;
+        border: none;
+        color: #dfdfdf;
+        cursor : pointer;
+      }
+
+      #pause { width: 80px; }
+
+      input {
+        width: 40px;
+        height: 30px;
+        text-align: center;
+        font-size: 16px;
+      }
+
     </style>
 </head>
 <body>
 
 <div class="left-col">
   <h1>Convay's<br> Game of Life</h1>
-  
-  <p>more examples coming soon...</p>  
+
+  <p>Examples list:</p>
+  <ul id="example-list"></ul>
 </div>
 
 <div class="right-col">
   <p class="example-name">Gosper's Glider Gun <a href="http://en.wikipedia.org/wiki/Gun_(cellular_automaton)">Read more...</a></p>
-    <div id="game"></div>
+  <div class="controls">
+      <div>
+        <button id="pause">Play</button>
+      </div>
+
+      <div>
+        <span class="label">Random generation</span>
+      </div>
+
+      <div>
+        <span class="label">Width</span>
+        <input id="width" type="text" value="50" >
+        <span class="label">Height</span>
+        <input id="height" type="text" value="50" >
+        <button id="createRandom">Random generation</button>
+      </div>
+  </div>
+  <div id="game"></div>
 </div>
 
 <script type="text/javascript" src="js/examples.js"></script>
 <script type="text/javascript" src="js/game.js"></script>
-
+<script>runGame( makeGrid( 50, 50 ), 30 )</script>
 </body>
 </html>
