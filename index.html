@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
   <head>
     <meta charset="utf-8">
     <title>Life</title>
@@ -10,56 +10,76 @@
         font-family: 'Open Sans', sans-serif;
       }
 
-      a { color: rgb(6, 107, 218); }
+      a {
+        color: rgb(6, 107, 218);
+      }
 
-      #game {}
-
-      #ui {
-          padding: 20px;
+      #world {
+        margin: 0 auto;
+        border-collapse: collapse;
+        border: 1px solid #999;
       }
 
       .left-col {
         position: fixed;
         top: 0;
         left: 0;
-        width: 25%;
+        width: 300px;
         min-height: 100%;
-        padding: 1%;
+        padding: 20px;
         background: #333;
         color: #DFDFDF;
       }
 
+      #example-list li {
+        display: block;
+        padding: 10px;
+        color: rgb(6, 107, 218);
+        cursor: pointer;
+      }
+
       .right-col {
-        float: right;
-        width: 65%;
         padding: 50px;
+        padding-left: 400px;
         margin: 0 auto;
         color: #414141;
       }
-
-      #field {
-          border: 1px solid #ccc;
-          border-right: none;
-          border-top: none
-      }
-
-      td {
-        height: 3px;
-        width: 3px;
+      
+      tr, td { 
+        height: 5px;
+        width: 5px;
         background: #DCE2EB;
         border: 1px solid #ccc;
-        border-left: none;
-        border-bottom: none;
         color: white;
       }
 
-      .alive { background: tomato; }
+      .alive {
+        /*background: rgb(14, 66, 14);*/
+        background: tomato;
+      }
 
-      .example-name { padding-left: 330px; }
+      .example-name {
+        padding-left: 330px;
+      }
 
-      #example-list a {
-          display: block;
-          padding: 10px;
+      .controls, .controls div { margin: 20px 0; }
+
+      button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #333;
+        border: none;
+        color: #dfdfdf;
+        cursor : pointer;
+      }
+
+      #pause { width: 80px; }
+
+      input {
+        width: 40px;
+        height: 30px;
+        text-align: center;
+        font-size: 16px;
       }
 
     </style>
@@ -68,40 +88,35 @@
 
 <div class="left-col">
   <h1>Convay's<br> Game of Life</h1>
-  
+
   <p>Examples list:</p>
-  <div id="example-list">
-      <a href="#" data-action="showExample" data-name="example1">Simple pattern #1</a>
-      <a href="#" data-action="showExample" data-name="example1">Simple pattern #2</a>
-      <a href="#" data-action="showExample" data-name="MWSS">MWSS</a>
-      <a href="#" data-action="showExample" data-name="gliderGun">Glider gun</a>
-      <a href="#" data-action="showExample" data-name="heavy1">Heavy pattern</a>
-  </div>
+  <ul id="example-list"></ul>
 </div>
 
 <div class="right-col">
-    <p class="example-name">Gosper's Glider Gun <a href="http://en.wikipedia.org/wiki/Gun_(cellular_automaton)">Read more...</a></p>
-    <div id="ui">
-        <div>
-            <button data-action="createRandom">Create random generation</button>
-            <button data-action="play">Play</button>
-            <button data-action="pause">Pause</button>
-        </div>
-    </div>
-    <di id="game"></div>
+  <p class="example-name">Gosper's Glider Gun <a href="http://en.wikipedia.org/wiki/Gun_(cellular_automaton)">Read more...</a></p>
+  <div class="controls">
+      <div>
+        <button id="pause">Play</button>
+      </div>
+
+      <div>
+        <span class="label">Random generation</span>
+      </div>
+
+      <div>
+        <span class="label">Width</span>
+        <input id="width" type="text" value="50" >
+        <span class="label">Height</span>
+        <input id="height" type="text" value="50" >
+        <button id="createRandom">Random generation</button>
+      </div>
+  </div>
+  <div id="game"></div>
 </div>
 
-
-<script type="text/javascript" src="js/underscore.js"></script>
 <script type="text/javascript" src="js/examples.js"></script>
-<script type="text/javascript" src="js/lib.js"></script>
-<script type="text/javascript" src="js/calc.js"></script>
-<script type="text/javascript" src="js/draw.js"></script>
-<script type="text/javascript" src="js/ui.js"></script>
-<script type="text/javascript" src="js/main.js"></script>
-<script>
-    GAME.initGame( 'game' );
-</script>
-
+<script type="text/javascript" src="js/game.js"></script>
+<script>runGame( makeGrid( 50, 50 ), 30 )</script>
 </body>
 </html>
