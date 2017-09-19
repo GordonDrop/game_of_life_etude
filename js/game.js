@@ -3,7 +3,7 @@
 // 2. Display
 
 // TODO:
-// 1. refuck to proto???
+// 1. refacktor
 // 2. Refuck ui building
 // 3. add canvas
 // 4. function to detect stable generations or dead worlds
